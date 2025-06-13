@@ -104,6 +104,29 @@ export const createEstudiante = async (req, res) => {
         });
     }
 };
+export const getEstudianteById = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const pool = await getConnection();
+
+        const result = await pool.request()
+            .input('id', sql.Int, id)
+            .query(`
+        SELECT id_estudiante, nombre, apellido, correo, facultad,
+               id_carrera, id_materia
+        FROM Estudiantes
+        WHERE id_estudiante = @id
+      `);
+
+        if (!result.recordset.length)
+            return res.status(404).json({ message: 'Estudiante no encontrado' });
+
+        res.json(result.recordset[0]);
+    } catch (err) {
+        console.error('Error getEstudianteById:', err);
+        res.status(500).json({ message: 'Error al obtener estudiante' });
+    }
+};
 export const getInsumosPrestadosEstudiante = async (req, res) => {
     try {
         const { id } = req.params;

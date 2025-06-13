@@ -7,7 +7,13 @@
   "scripts": {
     "dev": "nodemon src/index.js",
     "start": "node src/index.js",
-    "test": "jest"
+    "test": "jest",
+    "test:unit": "jest tests/unit",
+    "test:integration": "cross-env NODE_ENV=test jest tests/integration --runInBand",
+    "test:acceptance": "cucumber-js tests/acceptance/features --import tests/acceptance/steps/**/*.js",
+    "cy:open": "cypress open --config-file tests/functional/cypress.config.js",
+    "cy:run": "cypress run  --config-file tests/functional/cypress.config.js",
+    "test:functional": "start-server-and-test dev http://localhost:3000/docentes cy:run"
   },
   "keywords": [],
   "author": "",
@@ -27,16 +33,28 @@
   "devDependencies": {
     "@babel/core": "^7.27.4",
     "@babel/preset-env": "^7.27.2",
-    "babel-jest": "^30.0.0-beta.3",
+    "@cucumber/cucumber": "^11.3.0",
+    "@faker-js/faker": "^9.8.0",
+    "babel-jest": "^30.0.0",
+    "babel-plugin-transform-import-meta": "^2.3.3",
+    "cross-env": "^7.0.3",
+    "cypress": "^14.4.1",
     "eslint-plugin-jest": "^28.13.0",
     "jest": "^29.7.0",
     "nodemon": "^3.1.9",
+    "start-server-and-test": "^2.0.12",
     "supertest": "^7.1.1"
   },
   "jest": {
+    "testEnvironment": "node",
     "transform": {
       "^.+\\.js$": "babel-jest"
-    }
+    },
+    "setupFilesAfterEnv": [
+      "<rootDir>/tests/jest.setup.js"
+    ],
+    "detectOpenHandles": true,
+    "verbose": true
   },
   "engines": {
     "node": "18.x"

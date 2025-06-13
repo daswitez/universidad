@@ -1,5 +1,3 @@
-// tests/unit/controllers/insumos.controller.test.js
-/* eslint-env jest */
 import {
     getInsumos,
     getInsumo,
@@ -25,7 +23,6 @@ jest.mock('../../../src/helpers/alertas.js', () => ({
     gestionarAlertasInsumo: jest.fn(),
 }));
 
-// Mock para console.log y console.error
 global.console = {
     log: jest.fn(),
     error: jest.fn(),
@@ -33,7 +30,6 @@ global.console = {
     warn: console.warn
 };
 
-// Mocks mejorados
 const mockReq = (params = {}, body = {}, query = {}) => ({
     params,
     body,
@@ -44,7 +40,7 @@ const mockRes = () => {
     const res = {};
     res.status = jest.fn().mockReturnValue(res);
     res.json = jest.fn().mockReturnValue(res);
-    res.send = jest.fn().mockReturnValue(res); // Añadir mock para .send si se usa en los controladores
+    res.send = jest.fn().mockReturnValue(res);
     return res;
 };
 
@@ -59,7 +55,7 @@ describe('Controlador de Insumos', () => {
             request: jest.fn().mockReturnThis(),
             input: jest.fn().mockReturnThis(),
             query: jest.fn(),
-            // Agrega .transaction para que sql.connect pueda devolver un objeto con esta propiedad
+
             transaction: jest.fn(() => mockTransaction),
         };
 
@@ -72,8 +68,7 @@ describe('Controlador de Insumos', () => {
             query: jest.fn(),
         };
 
-        // Mock para la creación de transacciones
-        // Asegúrate de que sql.Transaction y sus métodos estén correctamente mockeados
+
         sql.Transaction = jest.fn().mockImplementation(() => ({
             request: jest.fn().mockReturnThis(),
             begin: jest.fn().mockResolvedValue(),
@@ -81,7 +76,7 @@ describe('Controlador de Insumos', () => {
             rollback: jest.fn().mockResolvedValue(),
             input: jest.fn().mockReturnThis(),
             query: jest.fn(),
-            // Añadir el objeto 'transaction' que contenga el método request
+
             transaction: {
                 request: jest.fn().mockReturnThis()
             }
@@ -89,11 +84,9 @@ describe('Controlador de Insumos', () => {
 
         db.getConnection.mockResolvedValue(mockPool);
 
-        // Mockear sql.connect para que devuelva un pool con el método transaction
         sql.connect = jest.fn().mockResolvedValue(mockPool);
     });
 
-    // getInsumos
     describe('getInsumos', () => {
         it('debe retornar todos los insumos', async () => {
             const req = mockReq();
@@ -108,7 +101,6 @@ describe('Controlador de Insumos', () => {
         });
     });
 
-    // getInsumo
     describe('getInsumo', () => {
         it('devuelve el insumo si existe', async () => {
             const req = mockReq({ id: '1' });
@@ -141,7 +133,6 @@ describe('Controlador de Insumos', () => {
         });
     });
 
-    // createInsumo
     describe('createInsumo', () => {
         it('crea un nuevo insumo correctamente', async () => {
             const req = mockReq({}, {
@@ -165,7 +156,6 @@ describe('Controlador de Insumos', () => {
         });
     });
 
-    // updateInsumo
     describe('updateInsumo', () => {
         it('actualiza un insumo existente', async () => {
             const req = mockReq({ id: '1' }, {
@@ -201,7 +191,6 @@ describe('Controlador de Insumos', () => {
         });
     });
 
-    // deleteInsumo
     describe('deleteInsumo', () => {
         it('elimina un insumo y sus alertas asociadas', async () => {
             const req = mockReq({ id: '1' });
@@ -228,7 +217,6 @@ describe('Controlador de Insumos', () => {
         });
     });
 
-    // getInsumosPorUbicacion
     describe('getInsumosPorUbicacion', () => {
         it('retorna insumos por ubicación', async () => {
             const req = mockReq({ ubicacion: 'Lab1' });
@@ -243,7 +231,6 @@ describe('Controlador de Insumos', () => {
         });
     });
 
-    // getInsumosEnUsoPorEncargado
     describe('getInsumosEnUsoPorEncargado', () => {
         it('retorna insumos en uso por encargado', async () => {
             const req = mockReq({}, {}, { id_encargado: '5' });
@@ -267,7 +254,6 @@ describe('Controlador de Insumos', () => {
         });
     });
 
-    // getMantenimientosActivos
     describe('getMantenimientosActivos', () => {
         it('retorna mantenimientos activos', async () => {
             const req = mockReq();
@@ -282,7 +268,6 @@ describe('Controlador de Insumos', () => {
         });
     });
 
-    // getHistorialMantenimientos
     describe('getHistorialMantenimientos', () => {
         it('retorna historial de mantenimientos', async () => {
             const req = mockReq();
