@@ -6,7 +6,6 @@ describe('👩‍🔬 Flujo Encargado', () => {
     let   id;
 
     it('alta → login → update → delete', () => {
-        /* 1️⃣ alta */
         cy.request('POST', '/encargados', {
             nombre: 'E2E', apellido: 'Enc', correo: email, contrasena: pass,
         }).then(({ status, body }) => {
